@@ -55,6 +55,15 @@ str(k2)
 k2
 ```
 
+
+rename those clusters according to their characteristics
+```{r}
+Kmean_Cluster<-factor(k2$cluster,levels = c(1,2,3,4),labels = c("Urban", "Rap", "NO!", "Murder"))
+Kmean_Cluster
+```
+
+
+
 fviz_cluster for better illustration for 2 dim 
 for more than two dim at first PCA then fviz_cluster
 ```{r}
