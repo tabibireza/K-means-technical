@@ -1,0 +1,80 @@
+---
+title: "k-means technical"
+output: html_notebook
+---
+
+packages
+```{r}
+library(tidyverse)
+library(cluster)
+library(factoextra)
+```
+
+data
+ 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973
+```{r}
+df <- USArrests
+str(df)
+```
+
+remove any missing value
+```{r}
+df <- na.omit(df)
+```
+
+scaling/standardizing
+```{r}
+df <- scale(df)
+head(df)
+```
+
+distance matrix from factoextra 
+```{r}
+distance <- get_dist (df)
+fviz_dist(distance, gradient = list(low="#00AFBB", mid = "white", high = "#FC4E07"))
+```
+
+optimal number of clusters 
+```{r}
+library(NbClust)
+df %>% 
+NbClust(min.nc=2, max.nc=15, index="all", method="kmeans")
+```
+
+
+
+
+
+Computing k-means clustering in R
+```{r}
+k2 <- kmeans(df, centers = 4, nstart = 25)
+str(k2)
+```
+
+```{r}
+k2
+```
+
+fviz_cluster for better illustration for 2 dim 
+for more than two dim at first PCA then fviz_cluster
+```{r}
+fviz_cluster(k2, data = df)
+```
+
+pairwise scatter plots
+CTRL + SHIFT + M
+```{r}
+  df %>% 
+  as_tibble() %>%
+  mutate(cluster = k2$cluster,
+         state = row.names(USArrests)) %>%
+  ggplot(aes(UrbanPop, Murder, color = factor(cluster), label = state)) + geom_text()
+  
+```
+
+
+print final
+```{r}
+print(k2)
+```
+

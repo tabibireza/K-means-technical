@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      K-means Cluster Analysis &middot; UC Business Analytics R Programming Guide
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  
+  <script type="text/javascript" async
+    src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/uc-badge.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p><img src="https://raw.githubusercontent.com/uc-r/uc-r.github.io/master/public/uc_logo.png" height=60 </img>  Follow me on twitter <a href="https://twitter.com/UC_Rstats">@bradleyboehmke</a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/r_bootcamp">Course: Intro to R Bootcamp</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/data_wrangling">Course: Data Wrangling with R</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/introduction">Introduction to R</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/basics">R Basics</a>
+          
+          <a class="sidebar-nav-item">Workflow </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/r_projects">&nbsp;&nbsp;&nbsp;&nbsp;RStudio Projects</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/r_markdown">&nbsp;&nbsp;&nbsp;&nbsp;R Markdown</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/r_notebook">&nbsp;&nbsp;&nbsp;&nbsp;R Notebook</a>
+
+          <a class="sidebar-nav-item">Data Types </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/section3_numbers">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Numbers</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/characters">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Characters</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/regex">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Regex</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/factors">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Factors</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/logicals">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Logical Values</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/dates">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with Dates</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/missing_values">&nbsp;&nbsp;&nbsp;&nbsp;Dealing with NA's</a>
+          
+          <a class="sidebar-nav-item">Data Structures </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/structure_basics">&nbsp;&nbsp;&nbsp;&nbsp;Basics</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/vectors">&nbsp;&nbsp;&nbsp;&nbsp;Managing Vectors</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/lists">&nbsp;&nbsp;&nbsp;&nbsp;Managing Lists</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/matrices">&nbsp;&nbsp;&nbsp;&nbsp;Managing Matrices</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/dataframes">&nbsp;&nbsp;&nbsp;&nbsp;Managing Data Frames</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/tibbles">&nbsp;&nbsp;&nbsp;&nbsp;Managing Tibbles</a>
+          
+          <a class="sidebar-nav-item">Functions </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/function_basics">&nbsp;&nbsp;&nbsp;&nbsp;Basics</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/functions">&nbsp;&nbsp;&nbsp;&nbsp;Writing Functions</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/control_statements">&nbsp;&nbsp;&nbsp;&nbsp;Control Statements</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/apply_family">&nbsp;&nbsp;&nbsp;&nbsp;Apply Family</a>
+          
+          <a class="sidebar-nav-item">Importing/Exporting Data </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/import">&nbsp;&nbsp;&nbsp;&nbsp;Importing Data</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/scraping">&nbsp;&nbsp;&nbsp;&nbsp;Scraping Data</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/exporting">&nbsp;&nbsp;&nbsp;&nbsp;Exporting Data</a>
+          
+          <a class="sidebar-nav-item">Shape & Transform Data </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/pipe">&nbsp;&nbsp;&nbsp;&nbsp;Simplify Code with %>%</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/tidyr">&nbsp;&nbsp;&nbsp;&nbsp;Reshape Data with tidyr</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/dplyr">&nbsp;&nbsp;&nbsp;&nbsp;Transform Data with dplyr</a>
+          
+          <a class="sidebar-nav-item">Visualizations </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/quickplots">&nbsp;&nbsp;&nbsp;&nbsp;Quick Plots</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/gda">&nbsp;&nbsp;&nbsp;&nbsp;Visual Data Exploration</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/ggplot">&nbsp;&nbsp;&nbsp;&nbsp;Advanced Plots with ggplot</a>
+          
+          <a class="sidebar-nav-item">Analytics </a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/descriptive">&nbsp;&nbsp;&nbsp;&nbsp;Descriptive Analytics</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/predictive">&nbsp;&nbsp;&nbsp;&nbsp;Predictive Analytics</a>
+          <a class="sidebar-nav-item" href="http://uc-r.github.io/prescriptive">&nbsp;&nbsp;&nbsp;&nbsp;Prescriptive Analytics</a>
+          
+          
+  </nav>
+
+  <div class="sidebar-item">
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">UC Business Analytics R Programming Guide</a>
+            <small></small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <head>
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>
+</head>
+
+
+<div class="page">
+  <A HREF="javascript:javascript:history.go(-1)">&#8617;</A>
+  <h1 class="page-title">K-means Cluster Analysis</h1>
+  
+  <p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-18-1.png" style="float:right; margin: 2px 0px 0px 10px; width: 50%; height: 50%;" /></p>
+
+<p>Clustering is a broad set of techniques for finding subgroups of observations within a data set. When we cluster observations, we want observations in the same group to be similar and observations in different groups to be dissimilar. Because there isn’t a response variable, this is an unsupervised method, which implies that it seeks to find relationships between the <script type="math/tex">n</script> observations without being trained by a response variable. Clustering allows us to identify which observations are alike, and potentially categorize them therein. K-means clustering is the simplest and the most commonly used clustering method for splitting a dataset into a set of k groups.</p>
+
+<h2 id="tldr">tl;dr</h2>
+
+<p>This tutorial serves as an introduction to the k-means clustering method.</p>
+
+<ol>
+  <li><a href="#replication">Replication Requirements</a>: What you’ll need to reproduce the analysis in this tutorial</li>
+  <li><a href="#prep">Data Preparation</a>: Preparing our data for cluster analysis</li>
+  <li><a href="#distance">Clustering Distance Measures</a>: Understanding how to measure differences in observations</li>
+  <li><a href="#kmeans">K-Means Clustering</a>: Calculations and methods for creating K subgroups of the data</li>
+  <li><a href="#optimal">Determining Optimal Clusters</a>: Identifying the right number of clusters to group your data</li>
+</ol>
+
+<h2 id="replication">Replication Requirements</h2>
+
+<p>To replicate this tutorial’s analysis you will need to load the following packages:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">  </span><span class="c1"># data manipulation</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span><span class="w">    </span><span class="c1"># clustering algorithms</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">factoextra</span><span class="p">)</span><span class="w"> </span><span class="c1"># clustering algorithms &amp; visualization</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="prep">Data Preparation</h2>
+
+<p>To perform a cluster analysis in R, generally, the data should be prepared as follows:</p>
+
+<ol>
+  <li>Rows are observations (individuals) and columns are variables</li>
+  <li>Any missing value in the data must be removed or estimated.</li>
+  <li>The data must be standardized (i.e., scaled) to make variables comparable. Recall that, standardization consists of transforming the variables such that they have mean zero and standard deviation one.<sup id="fnref:scale"><a href="#fn:scale" class="footnote">1</a></sup></li>
+</ol>
+
+<p>Here, we’ll use the built-in R data set <code class="highlighter-rouge">USArrests</code>, which contains statistics in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973. It includes also the percent of the population living in urban areas</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">USArrests</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To remove any missing value that might be present in the data, type this:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">na.omit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>As we don’t want the clustering algorithm to depend to an arbitrary variable unit, we start by scaling/standardizing the data using the R function <code class="highlighter-rouge">scale</code>:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="c1">##                Murder   Assault   UrbanPop         Rape</span><span class="w">
+</span><span class="c1">## Alabama    1.24256408 0.7828393 -0.5209066 -0.003416473</span><span class="w">
+</span><span class="c1">## Alaska     0.50786248 1.1068225 -1.2117642  2.484202941</span><span class="w">
+</span><span class="c1">## Arizona    0.07163341 1.4788032  0.9989801  1.042878388</span><span class="w">
+</span><span class="c1">## Arkansas   0.23234938 0.2308680 -1.0735927 -0.184916602</span><span class="w">
+</span><span class="c1">## California 0.27826823 1.2628144  1.7589234  2.067820292</span><span class="w">
+</span><span class="c1">## Colorado   0.02571456 0.3988593  0.8608085  1.864967207</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="distance">Clustering Distance Measures</h2>
+
+<p>The classification of observations into groups requires some methods for computing the distance or the (dis)similarity between each pair of observations. The result of this computation is known as a dissimilarity or distance matrix. There are many methods to calculate this distance information; the choice of distance measures is a critical step in clustering. It defines how the similarity of two elements (x, y) is calculated and it will influence the shape of the clusters.</p>
+
+<p>The choice of distance measures is a critical step in clustering. It defines how the similarity of two elements (x, y) is calculated and it will influence the shape of the clusters. The classical methods for distance measures are <em>Euclidean</em> and <em>Manhattan distances</em>, which are defined as follow:</p>
+
+<p><strong>Euclidean distance:</strong></p>
+
+<script type="math/tex; mode=display">d_{euc}(x,y) = \sqrt{\sum^n_{i=1}(x_i - y_i)^2} \tag{1}</script>
+
+<p><strong>Manhattan distance:</strong></p>
+
+<script type="math/tex; mode=display">d_{man}(x,y) = \sum^n_{i=1}|(x_i - y_i)| \tag{2}</script>
+
+<p>Where, <em>x</em> and <em>y</em> are two vectors of length <em>n</em>.</p>
+
+<p>Other dissimilarity measures exist such as correlation-based distances, which is widely used for gene expression data analyses. Correlation-based distance is defined by subtracting the correlation coefficient from 1. Different types of correlation methods can be used such as:</p>
+
+<p><strong>Pearson correlation distance:</strong></p>
+
+<script type="math/tex; mode=display">d_{cor}(x, y) = 1 - \frac{\sum^n_{i=1}(x_i-\bar x)(y_i - \bar y)}{\sqrt{\sum^n_{i=1}(x_i-\bar x)^2\sum^n_{i=1}(y_i - \bar y)^2}} \tag{3}</script>
+
+<p><strong>Spearman correlation distance:</strong></p>
+
+<p>The spearman correlation method computes the correlation between the rank of <em>x</em> and the rank of <em>y</em> variables.</p>
+
+<script type="math/tex; mode=display">d_{spear}(x, y) = 1 - \frac{\sum^n_{i=1}(x^\prime_i-\bar x^\prime)(y^\prime_i - \bar y^\prime)}{\sqrt{\sum^n_{i=1}(x^\prime_i-\bar x^\prime)^2\sum^n_{i=1}(y^\prime_i - \bar y^\prime)^2}} \tag{4}</script>
+
+<p>Where <script type="math/tex">x^\prime_i = rank(x_i)</script> and <script type="math/tex">y^\prime_i = rank(y_i)</script>.</p>
+
+<p><strong>Kendall correlation distance:</strong></p>
+
+<p>Kendall correlation method measures the correspondence between the ranking of <em>x</em> and <em>y</em> variables. The total number of possible pairings of <em>x</em> with <em>y</em> observations is <em>n(n − 1)/2</em>, where <em>n</em> is the size of <em>x</em> and <em>y</em>. Begin by ordering the pairs by the <em>x</em> values. If <em>x</em> and <em>y</em> are correlated, then they would have the same relative rank orders. Now,
+for each <script type="math/tex">y_i</script>, count the number of <script type="math/tex">y_j > y_i</script> (concordant pairs (c)) and the number of <script type="math/tex">% <![CDATA[
+y_j < y_i %]]></script> (discordant pairs (d)).</p>
+
+<p>Kendall correlation distance is defined as follow:</p>
+
+<script type="math/tex; mode=display">d_{kend}(x,y) = 1 - \frac{n_c - n_d}{\frac{1}{2}n(n - 1)} \tag{5}</script>
+
+<p>The choice of distance measures is very important, as it has a strong influence on the clustering results. For most common clustering software, the default distance measure is the Euclidean distance.  However, depending on the type of the data and the research questions, other dissimilarity measures might be preferred and you should be aware of the options.</p>
+
+<p>Within R it is simple to compute and visualize the distance matrix using the functions <code class="highlighter-rouge">get_dist</code> and <code class="highlighter-rouge">fviz_dist</code> from the <code class="highlighter-rouge">factoextra</code> R package.  This starts to illustrate which states have large dissimilarities (red) versus those that appear to be fairly similar (teal).</p>
+
+<ul>
+  <li><code class="highlighter-rouge">get_dist</code>: for computing a distance matrix between the rows of a data matrix. The default distance computed is the Euclidean; however, <code class="highlighter-rouge">get_dist</code> also supports distanced described in equations 2-5 above plus others.</li>
+  <li><code class="highlighter-rouge">fviz_dist</code>: for visualizing a distance matrix</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distance</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_dist</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">fviz_dist</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="n">gradient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">low</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#00AFBB"</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"#FC4E07"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /></p>
+
+<h2 id="kmeans">K-Means Clustering</h2>
+
+<p>K-means clustering is the most commonly used unsupervised machine learning algorithm for partitioning a given data set into a set of <em>k</em> groups (i.e. <em>k</em> clusters), where <em>k</em> represents the number of groups pre-specified by the analyst. It classifies objects in multiple groups (i.e., clusters), such that objects within the same cluster are as similar as possible (i.e., high intra-class similarity), whereas objects from different clusters are as dissimilar as possible (i.e., low inter-class similarity). In k-means clustering, each cluster is represented by its center (i.e, centroid) which corresponds to the mean of points assigned to the cluster.</p>
+
+<h3 id="the-basic-idea">The Basic Idea</h3>
+
+<p>The basic idea behind k-means clustering consists of defining clusters so that the total intra-cluster variation (known as total within-cluster variation) is minimized. There are several k-means algorithms available. The standard algorithm is the
+Hartigan-Wong algorithm (1979), which defines the total within-cluster variation as the sum of squared distances Euclidean distances between items and the corresponding centroid:</p>
+
+<script type="math/tex; mode=display">W(C_k) = \sum_{x_i \in C_k}(x_i - \mu_k)^2 \tag{6}</script>
+
+<p>where:</p>
+
+<ul>
+  <li><script type="math/tex">x_i</script> is a data point belonging to the cluster <script type="math/tex">C_k</script></li>
+  <li><script type="math/tex">\mu_k</script> is the mean value of the points assigned to the cluster <script type="math/tex">C_k</script></li>
+</ul>
+
+<p>Each observation (<script type="math/tex">x_i</script>) is assigned to a given cluster such that the sum of squares (SS) distance of the observation to their assigned cluster centers (<script type="math/tex">\mu_k</script>) is minimized.</p>
+
+<p>We define the total within-cluster variation as follows:</p>
+
+<script type="math/tex; mode=display">tot.withiness = \sum^k_{k=1}W(C_k) = \sum^k_{k=1}\sum_{x_i \in C_k}(x_i - \mu_k)^2 \tag{7}</script>
+
+<p>The <em>total within-cluster sum of square</em> measures the compactness (i.e goodness) of the clustering and we want it to be as small as possible.</p>
+
+<h3 id="k-means-algorithm">K-means Algorithm</h3>
+
+<p>The first step when using k-means clustering is to indicate the number of clusters (k) that will be generated in the final solution.  The algorithm starts by randomly selecting k objects from the data set to serve as the initial centers for the clusters. The selected objects are also known as cluster means or centroids. Next, each of the remaining objects is assigned to it’s closest centroid, where closest is defined using the Euclidean distance (Eq. 1) between the object and the cluster
+mean. This step is called “cluster assignment step”. After the assignment step, the algorithm computes the new mean value of each cluster. The term cluster “centroid update” is used to design this step. Now that the centers have been recalculated, every observation is checked again to see if it might be closer to a different cluster. All the objects are reassigned again using the updated cluster means.  The cluster assignment and centroid update steps are iteratively repeated until the
+cluster assignments stop changing (i.e until <em>convergence</em> is achieved). That is, the clusters formed in the current iteration are the same as those obtained in the previous iteration.</p>
+
+<p>K-means algorithm can be summarized as follows:</p>
+
+<ol>
+  <li>Specify the number of clusters (K) to be created (by the analyst)</li>
+  <li>Select randomly k objects from the data set as the initial cluster centers or means</li>
+  <li>Assigns each observation to their closest centroid, based on the Euclidean distance between the object and the centroid</li>
+  <li>For each of the k clusters update the cluster centroid by calculating the new mean values of all the data points in the cluster. The centroid of a Kth cluster is a vector of length <em>p</em> containing the means of all variables for the observations
+in the kth cluster; <em>p</em> is the number of variables.</li>
+  <li>Iteratively minimize the total within sum of square (Eq. 7). That is, iterate steps 3 and 4 until the cluster assignments stop changing or the maximum number of iterations is reached. By default, the R software uses 10 as the default value
+for the maximum number of iterations.</li>
+</ol>
+
+<h3 id="computing-k-means-clustering-in-r">Computing k-means clustering in R</h3>
+
+<p>We can compute k-means in R with the <code class="highlighter-rouge">kmeans</code> function. Here will group the data into two clusters (<code class="highlighter-rouge">centers = 2</code>). The <code class="highlighter-rouge">kmeans</code> function also has an <code class="highlighter-rouge">nstart</code> option that attempts multiple initial configurations and reports on the best one. For example, adding <code class="highlighter-rouge">nstart = 25</code> will generate 25 initial configurations. This approach is often recommended.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k</span><span class="m">2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">centers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+</span><span class="n">str</span><span class="p">(</span><span class="n">k</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="c1">## List of 9</span><span class="w">
+</span><span class="c1">##  $ cluster     : Named int [1:50] 1 1 1 2 1 1 2 2 1 1 ...</span><span class="w">
+</span><span class="c1">##   ..- attr(*, "names")= chr [1:50] "Alabama" "Alaska" "Arizona" "Arkansas" ...</span><span class="w">
+</span><span class="c1">##  $ centers     : num [1:2, 1:4] 1.005 -0.67 1.014 -0.676 0.198 ...</span><span class="w">
+</span><span class="c1">##   ..- attr(*, "dimnames")=List of 2</span><span class="w">
+</span><span class="c1">##   .. ..$ : chr [1:2] "1" "2"</span><span class="w">
+</span><span class="c1">##   .. ..$ : chr [1:4] "Murder" "Assault" "UrbanPop" "Rape"</span><span class="w">
+</span><span class="c1">##  $ totss       : num 196</span><span class="w">
+</span><span class="c1">##  $ withinss    : num [1:2] 46.7 56.1</span><span class="w">
+</span><span class="c1">##  $ tot.withinss: num 103</span><span class="w">
+</span><span class="c1">##  $ betweenss   : num 93.1</span><span class="w">
+</span><span class="c1">##  $ size        : int [1:2] 20 30</span><span class="w">
+</span><span class="c1">##  $ iter        : int 1</span><span class="w">
+</span><span class="c1">##  $ ifault      : int 0</span><span class="w">
+</span><span class="c1">##  - attr(*, "class")= chr "kmeans"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The output of <code class="highlighter-rouge">kmeans</code> is a list with several bits of information.  The most important being:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">cluster</code>: A vector of integers (from 1:k) indicating the cluster to which each point is allocated.</li>
+  <li><code class="highlighter-rouge">centers</code>: A matrix of cluster centers.</li>
+  <li><code class="highlighter-rouge">totss</code>: The total sum of squares.</li>
+  <li><code class="highlighter-rouge">withinss</code>: Vector of within-cluster sum of squares, one component per cluster.</li>
+  <li><code class="highlighter-rouge">tot.withinss</code>: Total within-cluster sum of squares, i.e. sum(withinss).</li>
+  <li><code class="highlighter-rouge">betweenss</code>: The between-cluster sum of squares, i.e. $totss-tot.withinss$.</li>
+  <li><code class="highlighter-rouge">size</code>: The number of points in each cluster.</li>
+</ul>
+
+<p>If we print the results we’ll see that our groupings resulted in 2 cluster sizes of 30 and 20.  We see the cluster centers (means) for the two groups across the four variables (<em>Murder, Assault, UrbanPop, Rape</em>). We also get the cluster assignment for each observation (i.e. Alabama was assigned to cluster 2, Arkansas was assigned to cluster 1, etc.).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k</span><span class="m">2</span><span class="w">
+</span><span class="c1">## K-means clustering with 2 clusters of sizes 20, 30</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Cluster means:</span><span class="w">
+</span><span class="c1">##      Murder    Assault   UrbanPop       Rape</span><span class="w">
+</span><span class="c1">## 1  1.004934  1.0138274  0.1975853  0.8469650</span><span class="w">
+</span><span class="c1">## 2 -0.669956 -0.6758849 -0.1317235 -0.5646433</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Clustering vector:</span><span class="w">
+</span><span class="c1">##        Alabama         Alaska        Arizona       Arkansas     California </span><span class="w">
+</span><span class="c1">##              1              1              1              2              1 </span><span class="w">
+</span><span class="c1">##       Colorado    Connecticut       Delaware        Florida        Georgia </span><span class="w">
+</span><span class="c1">##              1              2              2              1              1 </span><span class="w">
+</span><span class="c1">##         Hawaii          Idaho       Illinois        Indiana           Iowa </span><span class="w">
+</span><span class="c1">##              2              2              1              2              2 </span><span class="w">
+</span><span class="c1">##         Kansas       Kentucky      Louisiana          Maine       Maryland </span><span class="w">
+</span><span class="c1">##              2              2              1              2              1 </span><span class="w">
+</span><span class="c1">##  Massachusetts       Michigan      Minnesota    Mississippi       Missouri </span><span class="w">
+</span><span class="c1">##              2              1              2              1              1 </span><span class="w">
+</span><span class="c1">##        Montana       Nebraska         Nevada  New Hampshire     New Jersey </span><span class="w">
+</span><span class="c1">##              2              2              1              2              2 </span><span class="w">
+</span><span class="c1">##     New Mexico       New York North Carolina   North Dakota           Ohio </span><span class="w">
+</span><span class="c1">##              1              1              1              2              2 </span><span class="w">
+</span><span class="c1">##       Oklahoma         Oregon   Pennsylvania   Rhode Island South Carolina </span><span class="w">
+</span><span class="c1">##              2              2              2              2              1 </span><span class="w">
+</span><span class="c1">##   South Dakota      Tennessee          Texas           Utah        Vermont </span><span class="w">
+</span><span class="c1">##              2              1              1              2              2 </span><span class="w">
+</span><span class="c1">##       Virginia     Washington  West Virginia      Wisconsin        Wyoming </span><span class="w">
+</span><span class="c1">##              2              2              2              2              2 </span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Within cluster sum of squares by cluster:</span><span class="w">
+</span><span class="c1">## [1] 46.74796 56.11445</span><span class="w">
+</span><span class="c1">##  (between_SS / total_SS =  47.5 %)</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Available components:</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## [1] "cluster"      "centers"      "totss"        "withinss"    </span><span class="w">
+</span><span class="c1">## [5] "tot.withinss" "betweenss"    "size"         "iter"        </span><span class="w">
+</span><span class="c1">## [9] "ifault"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We can also view our results by using <code class="highlighter-rouge">fviz_cluster</code>.  This provides a nice illustration of the clusters.  If there are more than two dimensions (variables) <code class="highlighter-rouge">fviz_cluster</code> will perform principal component analysis (PCA) and plot the data points according to the first two principal components that explain the majority of the variance.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">k</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /></p>
+
+<p>Alternatively, you can use standard pairwise scatter plots to illustrate the clusters compared to the original variables.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">as_tibble</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="m">2</span><span class="o">$</span><span class="n">cluster</span><span class="p">,</span><span class="w">
+         </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">row.names</span><span class="p">(</span><span class="n">USArrests</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">UrbanPop</span><span class="p">,</span><span class="w"> </span><span class="n">Murder</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">cluster</span><span class="p">),</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_text</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /></p>
+
+<p>Because the number of clusters (k) must be set before we start the algorithm, it is often advantageous to use several different values of k and examine the differences in the results. We can execute the same process for 3, 4, and 5 clusters, and the results are shown in the figure:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k</span><span class="m">3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">centers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+</span><span class="n">k</span><span class="m">4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">centers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+</span><span class="n">k</span><span class="m">5</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">centers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># plots to compare</span><span class="w">
+</span><span class="n">p</span><span class="m">1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">k</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"point"</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"k = 2"</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="m">2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">k</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"point"</span><span class="p">,</span><span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"k = 3"</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="m">3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">k</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"point"</span><span class="p">,</span><span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"k = 4"</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="m">4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">k</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"point"</span><span class="p">,</span><span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"k = 5"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">gridExtra</span><span class="p">)</span><span class="w">
+</span><span class="n">grid.arrange</span><span class="p">(</span><span class="n">p</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /></p>
+
+<p>Although this visual assessment tells us where true dilineations occur (or do not occur such as clusters 2 &amp; 4 in the k = 5 graph) between clusters, it does not tell us what the optimal number of clusters is.</p>
+
+<h2 id="optimal">Determining Optimal Clusters</h2>
+
+<p>As you may recall the analyst specifies the number of clusters to use; preferably the analyst would like to use the optimal number of clusters.  To aid the analyst, the following explains the three most popular methods for determining the optimal clusters, which includes:</p>
+
+<ol>
+  <li><a href="#elbow">Elbow method</a></li>
+  <li><a href="#silo">Silhouette method</a></li>
+  <li><a href="#gap">Gap statistic</a></li>
+</ol>
+
+<h3 id="elbow">Elbow Method</h3>
+
+<p>Recall that, the basic idea behind cluster partitioning methods, such as k-means clustering, is to define clusters such that the total intra-cluster variation (known as total within-cluster variation or total within-cluster sum of square) is minimized:</p>
+
+<script type="math/tex; mode=display">minimize\Bigg(\sum^k_{k=1}W(C_k)\Bigg) \tag{8}</script>
+
+<p>where <script type="math/tex">C_k</script> is the <script type="math/tex">k^{th}</script> cluster and <script type="math/tex">W(C_k)</script> is the within-cluster variation. The total within-cluster sum of square (wss) measures the compactness of the clustering and we want it to be as small as possible.  Thus, we can use the following algorithm to define the optimal clusters:</p>
+
+<ol>
+  <li>Compute clustering algorithm (e.g., k-means clustering) for different values of <em>k</em>. For instance, by varying <em>k</em> from 1 to 10 clusters</li>
+  <li>For each <em>k</em>, calculate the total within-cluster sum of square (wss)</li>
+  <li>Plot the curve of wss according to the number of clusters <em>k</em>.</li>
+  <li>The location of a bend (knee) in the plot is generally considered as an indicator of the appropriate number of clusters.</li>
+</ol>
+
+<p>We can implement this in R with the following code.  The results suggest that 4 is the optimal number of clusters as it appears to be the bend in the knee (or elbow).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># function to compute total within-cluster sum of square </span><span class="w">
+</span><span class="n">wss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">)</span><span class="o">$</span><span class="n">tot.withinss</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Compute and plot wss for k = 1 to k = 15</span><span class="w">
+</span><span class="n">k.values</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">15</span><span class="w">
+
+</span><span class="c1"># extract wss for 2-15 clusters</span><span class="w">
+</span><span class="n">wss_values</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">map_dbl</span><span class="p">(</span><span class="n">k.values</span><span class="p">,</span><span class="w"> </span><span class="n">wss</span><span class="p">)</span><span class="w">
+
+</span><span class="n">plot</span><span class="p">(</span><span class="n">k.values</span><span class="p">,</span><span class="w"> </span><span class="n">wss_values</span><span class="p">,</span><span class="w">
+       </span><span class="n">type</span><span class="o">=</span><span class="s2">"b"</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">xlab</span><span class="o">=</span><span class="s2">"Number of clusters K"</span><span class="p">,</span><span class="w">
+       </span><span class="n">ylab</span><span class="o">=</span><span class="s2">"Total within-clusters sum of squares"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /></p>
+
+<p>Fortunately, this process to compute the “Elbow method” has been wrapped up in a single function (<code class="highlighter-rouge">fviz_nbclust</code>):</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+
+</span><span class="n">fviz_nbclust</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">kmeans</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"wss"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /></p>
+
+<h3 id="silo">Average Silhouette Method</h3>
+
+<p>In short, the average silhouette approach measures the quality of a clustering. That is, it determines how well each object lies within its cluster. A high average silhouette width indicates a good clustering. The average silhouette method computes the average silhouette of observations for different values of <em>k</em>. The optimal number of clusters <em>k</em> is the one that maximizes the average silhouette over a range of possible values for <em>k</em>.<sup id="fnref:kauf"><a href="#fn:kauf" class="footnote">2</a></sup></p>
+
+<p>We can use the <code class="highlighter-rouge">silhouette</code> function in the cluster package to compuate the average silhouette width. The following code computes this approach for 1-15 clusters.  The results show that 2 clusters maximize the average silhouette values with 4 clusters coming in as second optimal number of clusters.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># function to compute average silhouette for k clusters</span><span class="w">
+</span><span class="n">avg_sil</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">km.res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">centers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+  </span><span class="n">ss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">silhouette</span><span class="p">(</span><span class="n">km.res</span><span class="o">$</span><span class="n">cluster</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">(</span><span class="n">df</span><span class="p">))</span><span class="w">
+  </span><span class="n">mean</span><span class="p">(</span><span class="n">ss</span><span class="p">[,</span><span class="w"> </span><span class="m">3</span><span class="p">])</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Compute and plot wss for k = 2 to k = 15</span><span class="w">
+</span><span class="n">k.values</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">15</span><span class="w">
+
+</span><span class="c1"># extract avg silhouette for 2-15 clusters</span><span class="w">
+</span><span class="n">avg_sil_values</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">map_dbl</span><span class="p">(</span><span class="n">k.values</span><span class="p">,</span><span class="w"> </span><span class="n">avg_sil</span><span class="p">)</span><span class="w">
+
+</span><span class="n">plot</span><span class="p">(</span><span class="n">k.values</span><span class="p">,</span><span class="w"> </span><span class="n">avg_sil_values</span><span class="p">,</span><span class="w">
+       </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"b"</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Number of clusters K"</span><span class="p">,</span><span class="w">
+       </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Average Silhouettes"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /></p>
+
+<p>Similar to the elbow method, this process to compute the “average silhoutte method” has been wrapped up in a single function (<code class="highlighter-rouge">fviz_nbclust</code>):</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fviz_nbclust</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">kmeans</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"silhouette"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /></p>
+
+<h3 id="gap">Gap Statistic Method</h3>
+
+<p>The gap statistic has been published by <a href="http://web.stanford.edu/~hastie/Papers/gap.pdf">R. Tibshirani, G. Walther, and T. Hastie (Standford University, 2001)</a>. The approach can be applied to any clustering method (i.e. K-means clustering, hierarchical clustering).  The gap statistic compares the total intracluster variation for different values of <em>k</em> with their expected values under null reference distribution of the data (i.e. a distribution with no obvious clustering).  The reference dataset is generated using Monte Carlo simulations of the sampling process. That is, for each variable (<script type="math/tex">x_i</script>) in the data set we compute its range <script type="math/tex">[min(x_i), max(x_j)]</script> and generate values for the n points uniformly from the interval min to max.</p>
+
+<p>For the observed data and the the reference data, the total intracluster variation is computed using different values of <em>k</em>. The <em>gap statistic</em> for a given <em>k</em> is defined as follow:</p>
+
+<script type="math/tex; mode=display">Gap_n(k) = E^*_n{log(W_k)} - log(W_k) \tag{9}</script>
+
+<p>Where <script type="math/tex">E^*_n</script> denotes the expectation under a sample size <em>n</em> from the reference distribution. <script type="math/tex">E^*_n</script> is defined via bootstrapping (B) by generating B copies of the reference datasets and, by computing the average <script type="math/tex">log(W^*_k)</script>.  The gap statistic measures the deviation of the observed <script type="math/tex">W_k</script> value from its expected value under the null hypothesis.  The estimate of the optimal clusters (<script type="math/tex">\hat k</script>) will be the value that maximizes <script type="math/tex">Gap_n(k)</script>. This means that the clustering structure is far away from the uniform distribution of points.</p>
+
+<p>In short, the algorithm involves the following steps:</p>
+
+<ol>
+  <li>Cluster the observed data, varying the number of clusters from <script type="math/tex">k=1, \dots, k_{max}</script>, and compute the corresponding <script type="math/tex">W_k</script>.</li>
+  <li>Generate B reference data sets and cluster each of them with varying number of clusters <script type="math/tex">k=1, \dots, k_{max}</script>. Compute the estimated gap statistics presented in eq. 9.</li>
+  <li>Let <script type="math/tex">\bar w = (1/B) \sum_b log(W^*_{kb})</script>, compute the standard deviation <script type="math/tex">sd(k) = \sqrt{(1/b)\sum_b(log(W^*_{kb})- \bar w)^2}</script> and define <script type="math/tex">s_k = sd_k \times \sqrt{1 + 1/B}</script>.</li>
+  <li>Choose the number of clusters as the smallest k such that <script type="math/tex">Gap(k) \geq Gap(k+1) - s_{k+1}</script>.</li>
+</ol>
+
+<p>To compute the gap statistic method we can use the <code class="highlighter-rouge">clusGap</code> function which provides the gap statistic and standard error for an output.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># compute gap statistic</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+</span><span class="n">gap_stat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">clusGap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kmeans</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">,</span><span class="w">
+                    </span><span class="n">K.max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">50</span><span class="p">)</span><span class="w">
+</span><span class="c1"># Print the result</span><span class="w">
+</span><span class="n">print</span><span class="p">(</span><span class="n">gap_stat</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"firstmax"</span><span class="p">)</span><span class="w">
+</span><span class="c1">## Clustering Gap statistic ["clusGap"] from call:</span><span class="w">
+</span><span class="c1">## clusGap(x = df, FUNcluster = kmeans, K.max = 10, B = 50, nstart = 25)</span><span class="w">
+</span><span class="c1">## B=50 simulated reference sets, k = 1..10; spaceH0="scaledPCA"</span><span class="w">
+</span><span class="c1">##  --&gt; Number of clusters (method 'firstmax'): 4</span><span class="w">
+</span><span class="c1">##           logW   E.logW       gap     SE.sim</span><span class="w">
+</span><span class="c1">##  [1,] 3.458369 3.638250 0.1798804 0.03653200</span><span class="w">
+</span><span class="c1">##  [2,] 3.135112 3.371452 0.2363409 0.03394132</span><span class="w">
+</span><span class="c1">##  [3,] 2.977727 3.235385 0.2576588 0.03635372</span><span class="w">
+</span><span class="c1">##  [4,] 2.826221 3.120441 0.2942199 0.03615597</span><span class="w">
+</span><span class="c1">##  [5,] 2.738868 3.020288 0.2814197 0.03950085</span><span class="w">
+</span><span class="c1">##  [6,] 2.669860 2.933533 0.2636730 0.03957994</span><span class="w">
+</span><span class="c1">##  [7,] 2.598748 2.855759 0.2570109 0.03809451</span><span class="w">
+</span><span class="c1">##  [8,] 2.531626 2.784000 0.2523744 0.03869283</span><span class="w">
+</span><span class="c1">##  [9,] 2.468162 2.716498 0.2483355 0.03971815</span><span class="w">
+</span><span class="c1">## [10,] 2.394884 2.652241 0.2573567 0.04104674</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We can visualize the results with <code class="highlighter-rouge">fviz_gap_stat</code> which suggests four clusters as the optimal number of clusters.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fviz_gap_stat</span><span class="p">(</span><span class="n">gap_stat</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /></p>
+
+<p>In addition to these commonly used approaches, the <code class="highlighter-rouge">NbClust</code> package, published by <a href="http://www.jstatsoft.org/v61/i06/paper">Charrad et al., 2014</a>, provides 30 indices for determining the relevant number of clusters and proposes to users the best clustering scheme from the different results obtained by varying all combinations of number of clusters, distance measures, and clustering methods.</p>
+
+<h3 id="extracting-results">Extracting Results</h3>
+
+<p>With most of these approaches suggesting 4 as the number of optimal clusters, we can perform the final analysis and extract the results using 4 clusters.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Compute k-means clustering with k = 4</span><span class="w">
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span><span class="w">
+</span><span class="n">final</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span><span class="w">
+</span><span class="n">print</span><span class="p">(</span><span class="n">final</span><span class="p">)</span><span class="w">
+</span><span class="c1">## K-means clustering with 4 clusters of sizes 13, 16, 13, 8</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Cluster means:</span><span class="w">
+</span><span class="c1">##       Murder    Assault   UrbanPop        Rape</span><span class="w">
+</span><span class="c1">## 1 -0.9615407 -1.1066010 -0.9301069 -0.96676331</span><span class="w">
+</span><span class="c1">## 2 -0.4894375 -0.3826001  0.5758298 -0.26165379</span><span class="w">
+</span><span class="c1">## 3  0.6950701  1.0394414  0.7226370  1.27693964</span><span class="w">
+</span><span class="c1">## 4  1.4118898  0.8743346 -0.8145211  0.01927104</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Clustering vector:</span><span class="w">
+</span><span class="c1">##        Alabama         Alaska        Arizona       Arkansas     California </span><span class="w">
+</span><span class="c1">##              4              3              3              4              3 </span><span class="w">
+</span><span class="c1">##       Colorado    Connecticut       Delaware        Florida        Georgia </span><span class="w">
+</span><span class="c1">##              3              2              2              3              4 </span><span class="w">
+</span><span class="c1">##         Hawaii          Idaho       Illinois        Indiana           Iowa </span><span class="w">
+</span><span class="c1">##              2              1              3              2              1 </span><span class="w">
+</span><span class="c1">##         Kansas       Kentucky      Louisiana          Maine       Maryland </span><span class="w">
+</span><span class="c1">##              2              1              4              1              3 </span><span class="w">
+</span><span class="c1">##  Massachusetts       Michigan      Minnesota    Mississippi       Missouri </span><span class="w">
+</span><span class="c1">##              2              3              1              4              3 </span><span class="w">
+</span><span class="c1">##        Montana       Nebraska         Nevada  New Hampshire     New Jersey </span><span class="w">
+</span><span class="c1">##              1              1              3              1              2 </span><span class="w">
+</span><span class="c1">##     New Mexico       New York North Carolina   North Dakota           Ohio </span><span class="w">
+</span><span class="c1">##              3              3              4              1              2 </span><span class="w">
+</span><span class="c1">##       Oklahoma         Oregon   Pennsylvania   Rhode Island South Carolina </span><span class="w">
+</span><span class="c1">##              2              2              2              2              4 </span><span class="w">
+</span><span class="c1">##   South Dakota      Tennessee          Texas           Utah        Vermont </span><span class="w">
+</span><span class="c1">##              1              4              3              2              1 </span><span class="w">
+</span><span class="c1">##       Virginia     Washington  West Virginia      Wisconsin        Wyoming </span><span class="w">
+</span><span class="c1">##              2              2              1              1              2 </span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Within cluster sum of squares by cluster:</span><span class="w">
+</span><span class="c1">## [1] 11.952463 16.212213 19.922437  8.316061</span><span class="w">
+</span><span class="c1">##  (between_SS / total_SS =  71.2 %)</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## Available components:</span><span class="w">
+</span><span class="c1">## </span><span class="w">
+</span><span class="c1">## [1] "cluster"      "centers"      "totss"        "withinss"    </span><span class="w">
+</span><span class="c1">## [5] "tot.withinss" "betweenss"    "size"         "iter"        </span><span class="w">
+</span><span class="c1">## [9] "ifault"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We can visualize the results using <code class="highlighter-rouge">fviz_cluster</code>:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fviz_cluster</span><span class="p">(</span><span class="n">final</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/public/images/analytics/clustering/kmeans/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /></p>
+
+<p>And we can extract the clusters and add to our initial data to do some descriptive statistics at the cluster level:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">USArrests</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">Cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">final</span><span class="o">$</span><span class="n">cluster</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise_all</span><span class="p">(</span><span class="s2">"mean"</span><span class="p">)</span><span class="w">
+</span><span class="c1">## # A tibble: 4 × 5</span><span class="w">
+</span><span class="c1">##   Cluster   Murder   Assault UrbanPop     Rape</span><span class="w">
+</span><span class="c1">##     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span><span class="w">
+</span><span class="c1">## 1       1  3.60000  78.53846 52.07692 12.17692</span><span class="w">
+</span><span class="c1">## 2       2  5.65625 138.87500 73.87500 18.78125</span><span class="w">
+</span><span class="c1">## 3       3 10.81538 257.38462 76.00000 33.19231</span><span class="w">
+</span><span class="c1">## 4       4 13.93750 243.62500 53.75000 21.41250</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="additional-comments">Additional Comments</h2>
+
+<p>K-means clustering is a very simple and fast algorithm. Furthermore, it can efficiently deal with very large data sets.  However, there are some weaknesses of the k-means approach.</p>
+
+<p>One potential disadvantage of K-means clustering is that it requires us to pre-specify the number of clusters. Hierarchical clustering is an alternative approach which does not require that we commit to a particular choice of clusters. Hierarchical clustering has an added advantage over K-means clustering in that it results in an attractive tree-based representation of the observations, called a dendrogram. A future tutorial will illustrate the hierarchical clustering approach.</p>
+
+<p>An additional disadvantage of K-means is that it’s sensitive to outliers and different results can occur if you change the ordering of your data. The Partitioning Around Medoids (PAM) clustering approach is less sensititive to outliers and provides a robust alternative to k-means to deal with these situations. A future tutorial will illustrate the PAM clustering approach.</p>
+
+<p>For now, you can learn more about clustering methods with:</p>
+
+<ul>
+  <li><a href="http://www-bcf.usc.edu/~gareth/ISL/">An Introduction to Statistical Learning</a></li>
+  <li><a href="http://appliedpredictivemodeling.com/">Applied Predictive Modeling</a></li>
+  <li><a href="https://statweb.stanford.edu/~tibs/ElemStatLearn/">Elements of Statistical Learning</a></li>
+  <li><a href="https://www.amazon.com/Practical-Guide-Cluster-Analysis-Unsupervised/dp/1542462703/ref=sr_1_1?ie=UTF8&amp;qid=1493169647&amp;sr=8-1&amp;keywords=practical+guide+to+cluster+analysis">A Practical Guide to Cluster Analysis in R</a></li>
+</ul>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:scale">
+      <p>Standardization makes the four distance measure methods - Euclidean, Manhattan, Correlation and Eisen - more similar than they would be with non-transformed data. <a href="#fnref:scale" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:kauf">
+      <p><a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316801">Kaufman and Rousseeuw, 1990</a> <a href="#fnref:kauf" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  
+</div>
+
+      </div>
+    
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+     <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-73968959-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+
+</html>
