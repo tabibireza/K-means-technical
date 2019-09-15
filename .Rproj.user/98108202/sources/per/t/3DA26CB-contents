@@ -31,6 +31,7 @@ head(df)
 distance matrix from factoextra 
 ```{r}
 distance <- get_dist (df)
+as.matrix(distance) [1:5,1:5]
 fviz_dist(distance, gradient = list(low="#00AFBB", mid = "white", high = "#FC4E07"))
 ```
 
